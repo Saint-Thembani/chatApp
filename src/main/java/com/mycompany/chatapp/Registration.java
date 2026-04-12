@@ -8,25 +8,35 @@ package com.mycompany.chatapp;
  *
  * @author rethe
  */
+import java.util.Scanner;
 public class Registration {
-    private String username;
-    private String password;
-    private String phoneNumber;
+    Scanner input = new Scanner(System.in);
+     String username;
+     String password;
+     String phoneNumber;
+     String storedUser;
+     String storedPassword;
+     String storedNumber;
 
     // Username
-    public boolean checkUsername(String username){
+     boolean checkUsername(){
         int usernameLen = username.length();
-        return (username.contains("_") && usernameLen <= 5);
+        if(username.contains("_") && usernameLen <= 5){
+            return true;
+        } else{
+            return false;
+        }
     }
 
-    public void getUsernamemessage(String username){
-        if (checkUsername(username)){
+    public void  getUsernamemessage(String username){
+        if (checkUsername()){
             System.out.println("Username successfully captured.");
         } else {
             System.out.println("Username is not correctly formatted; please ensure "
                     + "your username contains an underscore and is no more "
                     + "than 5 characters in length.");
         }
+        
     }
 
     public void setUser(String username){
@@ -38,11 +48,11 @@ public class Registration {
     }
 
     // Password
-    public boolean checkPasswordcomplexity(String password){
+    public boolean checkPasswordcomplexity(){
         if (password.length() < 8){
             return false;
         }
-
+        
         boolean checkUppercase = false;
         boolean checkFornumber = false;
         boolean checkForspecialCharacter = false;
@@ -64,15 +74,16 @@ public class Registration {
         return checkUppercase && checkFornumber && checkForspecialCharacter;
     }
 
-    public void getPasswordvalidationMessage(String password){
-        if (checkPasswordcomplexity(password)){
+    public void getPasswordvalidationMessage(){
+        if (checkPasswordcomplexity()){
             System.out.println("Password successfully captured");
         } else {
             System.out.println("Password is incorrectly formatted, please ensure"
                     + " that the password contains at least 8 characters, a capital"
                     + " letter, a number and a special character.");
+            
         }
-    }
+        }
       public void setPassword(String password){
         this.password = password;
     }
@@ -82,9 +93,77 @@ public class Registration {
     }
     
     //Phone number
-    public boolean checkPhonenumber(String phoneNumber){
-        if (phoneNumber.startsWith("+27"));
+   public boolean checkPhonenumber(){
+        if (!phoneNumber.startsWith("+27")){
+            return false;
+        }
+
+        if (phoneNumber.length() != 12){
+        return false;
+        }
+
+        for (int i = 3; i < phoneNumber.length(); i++){
+        if (!Character.isDigit(phoneNumber.charAt(i))){
+            return false;
+        }
+        }
+
+    return true;
+}
+        public void setNumber(String phoneNumber){
+            this.phoneNumber = phoneNumber;
+            }
+
+        public String getNumber(){
+        return this.phoneNumber;
+        }
+void registerUser() {
+    System.out.println("\n======REGISTER======");
+
+    // Username
+    System.out.println("Enter username:");
+    username = input.nextLine();
+
+    while (!checkUsername()){
+        getUsernamemessage(username);
+        System.out.println("Enter username again:");
+        username = input.nextLine();
+    }
+
+    // Password
+    System.out.println("Enter password:");
+    password = input.nextLine();
+
+    while (!checkPasswordcomplexity()){
+        getPasswordvalidationMessage();
+        System.out.println("Enter password again:");
+        password = input.nextLine();
+    }
+
+    // Phone number
+    System.out.println("Enter phone number:");
+    phoneNumber = input.nextLine();
+
+    while (!checkPhonenumber()){
+        System.out.println("Invalid phone number. Use +27 followed by 9 digits.");
+        System.out.println("Enter phone number again:");
+        phoneNumber = input.nextLine();
+    }
+
+    // Final result
+    if (checkUsername() && checkPasswordcomplexity() && checkPhonenumber()){
+        
+        storedUser= username;
+        storedPassword= password;
+        storedNumber= phoneNumber;
+        System.out.println("Registration was successful.");
+    } else {
+        System.out.println("Registration was unsuccessful please try again.");
     }
 }
+        
+    }
+  
+
 
 

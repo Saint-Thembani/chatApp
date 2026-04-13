@@ -11,7 +11,7 @@ package com.mycompany.chatapp;
 import java.util.Scanner;
 public class Registration {
     Scanner input = new Scanner(System.in);
-     String username;
+     String username="Kyl_1";
      String password;
      String phoneNumber;
      String storedUser;

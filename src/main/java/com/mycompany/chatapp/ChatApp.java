@@ -30,17 +30,10 @@ package com.mycompany.chatapp;
             enterMenu.nextLine();
 
             switch(choice) {
-                case 1:
-                    reg.registerUser();
-                    break;
-                case 2:
-                    login.userLogin();
-                    break;
-                case 3:
-                    System.out.println("Goodbye.");
-                    break;
-                default:
-                    System.out.println("Invalid choice.");
+                case 1 -> reg.registerUser();
+                case 2 -> login.userLogin();
+                case 3 -> System.out.println("Goodbye.");
+                default -> System.out.println("Invalid choice.");
             }
 
         } while (choice != 3);

@@ -11,17 +11,16 @@ package com.mycompany.chatapp;
 import java.util.Scanner;
 public class Registration {
     Scanner input = new Scanner(System.in);
-     String username="Kyl_1";
+     String username;
      String password;
      String phoneNumber;
      String storedUser;
      String storedPassword;
      String storedNumber;
 
-    // Username
+    // Checking if Username is valid.
      boolean checkUsername(){
-        int usernameLen = username.length();
-        if(username.contains("_") && usernameLen <= 5){
+        if(username.contains("_") && username.length() <= 5){
             return true;
         } else{
             return false;
@@ -47,8 +46,8 @@ public class Registration {
         return this.username;
     }
 
-    // Password
-    public boolean checkPasswordcomplexity(){
+    // Checking password complexity.
+    boolean checkPasswordcomplexity(){
         if (password.length() < 8){
             return false;
         }
@@ -92,9 +91,9 @@ public class Registration {
         return this.password;
     }
     
-    //Phone number
+    // 
    public boolean checkPhonenumber(){
-        if (!phoneNumber.startsWith("+27")){
+        if (phoneNumber.startsWith("+27")){
             return false;
         }
 

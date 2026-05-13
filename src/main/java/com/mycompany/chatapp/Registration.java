@@ -30,7 +30,6 @@ public class Registration {
     public void  getUsernamemessage(String username){
         if (checkUsername()){
             System.out.println("Username successfully captured.");
-        } else {
             System.out.println("Username is not correctly formatted; please ensure "
                     + "your username contains an underscore and is no more "
                     + "than 5 characters in length.");

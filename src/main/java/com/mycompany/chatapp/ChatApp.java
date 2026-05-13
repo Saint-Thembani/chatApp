@@ -18,6 +18,7 @@ package com.mycompany.chatapp;
 
         Registration reg = new Registration();
         Login login = new Login(reg);
+        Messages msg= new Messages();
 
         do {
             System.out.println("\n======MENU======");
@@ -39,5 +40,6 @@ package com.mycompany.chatapp;
         } while (choice != 3);
 
         enterMenu.close();
+        }
+          
     }
-}

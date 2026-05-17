@@ -15,11 +15,10 @@ package com.mycompany.chatapp;
         public Login(Registration reg){
         this.reg = reg;
 }
-    void userLogin(){
+     public boolean userLogin(){
         
         if (reg.getNumber() == null){
-            System.out.println("Not registered Yet.");
-            return;
+            System.out.println("Not registered Yet."); 
         }
         int attempts=3;
         boolean success =false;
@@ -48,5 +47,6 @@ package com.mycompany.chatapp;
       if(!success){
           System.out.println("Failed to login. Account is locked.");
       }
+      return success;
     }
     }

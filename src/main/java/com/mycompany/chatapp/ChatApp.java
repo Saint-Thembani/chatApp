@@ -17,8 +17,8 @@ package com.mycompany.chatapp;
         int choice;
 
         Registration reg = new Registration();
-        Login login = new Login(reg);
-        Messages msg= new Messages();
+            Login login = new Login(reg);
+            Messages msg = new Messages(reg, login);
 
         do {
             System.out.println("\n======MENU======");
@@ -32,7 +32,10 @@ package com.mycompany.chatapp;
 
             switch(choice) {
                 case 1 -> reg.registerUser();
-                case 2 -> login.userLogin();
+                case 2 -> {if(login.userLogin()){
+                         msg.userMenu();
+                        } else{
+                        System.out.println("Login was not successful"); } }
                 case 3 -> System.out.println("Goodbye.");
                 default -> System.out.println("Invalid choice.");
             }
@@ -40,6 +43,7 @@ package com.mycompany.chatapp;
         } while (choice != 3);
 
         enterMenu.close();
+            
         }
           
     }

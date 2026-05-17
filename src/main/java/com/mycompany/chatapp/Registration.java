@@ -92,7 +92,7 @@ public class Registration {
     
     // 
    public boolean checkPhonenumber(){
-        if (phoneNumber.startsWith("+27")){
+        if (!phoneNumber.startsWith("+27")){
             return false;
         }
 

@@ -23,11 +23,10 @@ public class Messages {
    Registration reg;
     Login login;
 
-    public Messages() {
-        reg = new Registration();
-        login = new Login(reg);
-    }
-
+        public Messages(Registration reg, Login login) {
+            this.reg = reg;
+            this.login = login;
+}
     public void userMenu() {
         do {
             System.out.println("\n====== WELCOME TO QUICKCHAT======");
@@ -61,9 +60,14 @@ public class Messages {
         }
         
     }
-    String receipentCell = input.nextLine();
-    boolean checkRecepientzcell(){
-                if (receipentCell.startsWith("+27")){
+    String receipentCell;
+
+        void getRecipientcell(){
+        System.out.println("Enter recipient number:");
+        receipentCell = input.nextLine();
+}
+    boolean checkRecepientcell(){
+                if (!receipentCell.startsWith("+27")){
             return false;
         }
 
@@ -80,8 +84,17 @@ public class Messages {
         return true;
 }
     void sendMesasage(){
+        System.out.println("Please enter the amount of messages you want to send: ");
+        int messageAmount = input.nextInt();
+        int i=0;
+        input.nextLine();
+        
+        do {
         System.out.println("Please enter your message: ");
     message= input.nextLine();
+    i=i+1;
+        } while (i<= messageAmount);
+        
     int extra;
     extra = message.length()-250;
     
@@ -102,8 +115,8 @@ public class Messages {
     }
         String[] words = message.split("\\s+");
                 if (words.length >= 2) {
-            String firstWord = words[0];
-            String secondWord = words[1];
+            firstWord = words[0];
+            secondWord = words[1];
                 }
         
         return result +":"+firstWord+secondWord;

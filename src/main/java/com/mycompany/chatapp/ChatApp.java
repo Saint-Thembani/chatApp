@@ -9,6 +9,12 @@ package com.mycompany.chatapp;
  * @author rethe
  */
         import java.util.Scanner;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
       public class ChatApp {
 
     public static void main(String[] args) {

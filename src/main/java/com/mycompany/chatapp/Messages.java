@@ -2,6 +2,12 @@ package com.mycompany.chatapp;
 
 import java.util.Scanner;
 import java.util.Random;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class Messages {
 
@@ -87,6 +93,7 @@ public class Messages {
     }
 
 void sendMessage() {
+    long messageID = rand.nextLong(9999999999L);
     do {
 
         getRecipientCell();
@@ -148,8 +155,9 @@ void sendMessage() {
         }
 
         do {
-            System.out.println("Do you want to enter another message? (yes/no)");
-            continueChoice = input.nextLine();
+           input.nextLine();
+                System.out.println("Do you want to enter another message? (yes/no)");
+                    continueChoice = input.nextLine();
 
         }while (!continueChoice.equalsIgnoreCase("yes")
                     && !continueChoice.equalsIgnoreCase("no"));
@@ -192,4 +200,5 @@ void sendMessage() {
             return "Message ID: " + messageID+ "\nMessage Hash: " + createHashmap()+
                     "\nRecipient: " + recipientCell+ "\nMessage: " + message;
 }
+        
     }

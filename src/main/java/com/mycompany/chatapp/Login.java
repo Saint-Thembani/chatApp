@@ -11,9 +11,10 @@ package com.mycompany.chatapp;
     public class Login {
        Scanner input = new Scanner(System.in);
        Registration reg;
-
+public String username;
         public Login(Registration reg){
         this.reg = reg;
+
 }
      public boolean userLogin(){
         
@@ -28,7 +29,7 @@ package com.mycompany.chatapp;
         String phoneNumber = input.nextLine();
         
         System.out.println(" Enter your username");
-       String username = input.nextLine();
+        username = input.nextLine();
        
         System.out.println("Enter your password");
         String password = input.nextLine();

@@ -42,6 +42,11 @@ public class Messages {
     String recipientCell;
 
     List<MessageData> sentMessages = new ArrayList<>();
+    List<MessageData> storedMessages = new ArrayList<>();
+    List<MessageData> disregardedMessages = new ArrayList<>();
+
+    List<String> messageIDs = new ArrayList<>();
+    List<String> messageHashes = new ArrayList<>();
 
     Registration reg;
     Login login;
@@ -57,7 +62,7 @@ public class Messages {
     void saveMessagesToJSON() {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
-            gson.toJson(sentMessages, writer);
+            gson.toJson(storedMessages, writer);
         } catch (IOException e) {
             System.out.println("Error saving messages.");
         }
@@ -69,12 +74,12 @@ public class Messages {
             Type listType =
                     new TypeToken<ArrayList<MessageData>>() {
                     }.getType();
-            sentMessages = gson.fromJson(reader, listType);
-            if (sentMessages == null) {
-                sentMessages = new ArrayList<>();
+           storedMessages = gson.fromJson(reader, listType);
+            if (storedMessages == null) {
+                storedMessages = new ArrayList<>();
             }
         } catch (IOException e) {
-            sentMessages = new ArrayList<>();
+            storedMessages = new ArrayList<>();
         }
     }
 
@@ -83,7 +88,8 @@ public class Messages {
             System.out.println("\n====== WELCOME TO QUICKCHAT ======");
             System.out.println("1. Send messages");
             System.out.println("2. Show recently sent messages");
-            System.out.println("3. Quit");
+            System.out.println("3. Stored messages.");
+            System.out.println("4. Quit");
 
             System.out.print("Enter your menu option: ");
 
@@ -96,14 +102,17 @@ public class Messages {
                     
                 case 2 ->
                     printMessages();
+                   
+                   case 3 ->
+                        storedMessages();
                     
-                case 3 ->
+                case 4 ->
                     System.out.println("Goodbye.");
 
                 default ->
                     System.out.println("Invalid choice.");
             }
-        } while (choice != 3);
+        } while (choice != 4);
     }
 
     boolean checkMessageID() {
@@ -192,7 +201,9 @@ public class Messages {
                     );
 
                     sentMessages.add(msg);
-                    saveMessagesToJSON();
+
+                    messageIDs.add(msg.messageID);
+                    messageHashes.add(msg.messageHash);
 
                     System.out.println(
                             "Message sent successfully.");
@@ -204,26 +215,41 @@ public class Messages {
                     System.out.println(displayMessage());
                 }
 
-                case 2 -> {
+                    case 2 -> {
 
-                    System.out.println(
-                            "Message deleted.");
-                }
+    MessageData msg = new MessageData(
+            String.valueOf(messageID),
+            recipientCell,
+            message,
+            createHashmap()
+    );
+
+    disregardedMessages.add(msg);
+
+    System.out.println("Message deleted.");
+}
+                
                 case 3 -> {
-                    messageAmount++;
+                      messageAmount++;
 
-                    MessageData msg = new MessageData(
-                            String.valueOf(messageID),
-                            recipientCell,
-                            message,
-                            createHashmap()
-                    );
-                    sentMessages.add(msg);
+                      MessageData msg = new MessageData(
+                              String.valueOf(messageID),
+                              recipientCell,
+                              message,
+                              createHashmap()
+                      );
 
-                    saveMessagesToJSON();
-                    System.out.println(
-                            "Message stored successfully.");
-                }
+                      storedMessages.add(msg);
+
+                        messageIDs.add(msg.messageID);
+                        messageHashes.add(msg.messageHash);
+                      
+
+                      saveMessagesToJSON();
+
+                      System.out.println(
+                              "Message stored successfully.");
+                  }
                 default -> {
 
                     System.out.println("Invalid option.");
@@ -294,29 +320,121 @@ public class Messages {
                 + "\nRecipient: " + recipientCell
                 + "\nMessage: " + message;
     }
+    void storedMessages(){
+         do {
+            System.out.println("\n====== STORED MESSAGES ======");
+            System.out.println("1. Display sender and recipent of all stored messages.");
+            System.out.println("2. Displau the longest stored message.");
+            System.out.println("3. Search for message.");
+            System.out.println("4. Search for all messages from a particular recipent.");
+             System.out.println("5.Delete message by hashmap.");
+             System.out.println("6. Display report of all stored messages.");
+             System.out.println("7. Exit menu.");
+
+            System.out.print("Enter your menu option: ");
+
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                    case 1 ->
+                    displayStoredMessages();
+                    
+                    case 2 ->
+                        System.out.println(longestMessage());
+                    
+                    case 3 -> {
+
+                            System.out.println("Enter Message ID:");
+
+                            String id = input.nextLine();
+
+                            System.out.println(searchByMessageID(id));
+                        }
+
+                    case 4 -> {
+
+                            System.out.println("Enter recipient:");
+
+                            String recipient = input.nextLine();
+
+                            System.out.println(
+                                    searchByRecipient(recipient));
+                        }
+
+                    case 5 -> {
+
+                            System.out.println("Enter hash:");
+
+                            String hash = input.nextLine();
+
+                            if (deleteByHash(hash)) {
+
+                            System.out.println("Message deleted.");
+                            } else {
+
+                            System.out.println("Hash not found.");
+            }
+        }
+                    
+                    case 6->
+                            System.out.println(displayReport());
+                    
+                    case 7 ->
+                            System.out.println("Returning to main menu.");
+                    
+                    default ->
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 7);
+        
+    }
+    void displayStoredMessages() {
+
+    if (storedMessages.isEmpty()) {
+
+        System.out.println("No stored messages.");
+        return;
+    }
+
+    for (int i = 0; i < storedMessages.size(); i++) {
+
+        MessageData msg = storedMessages.get(i);
+
+        System.out.println(
+                "Sender: " + login.username
+                + "\nRecipient: "
+                + msg.recipient
+                + "\n");
+    }
+}
     String longestMessage() {
 
         String longest = "";
 
-        for (MessageData msg : sentMessages) {
+for (int i = 0; i < storedMessages.size(); i++) {
 
-            if (msg.message.length() > longest.length()) {
+    MessageData msg = storedMessages.get(i);
 
-                longest = msg.message;
-            }
-        }
+    if (msg.message.length() > longest.length()) {
+
+        longest = msg.message;
+    }
+}
 
         return longest;
     }
     String searchByMessageID(String id) {
 
-        for (MessageData msg : sentMessages) {
+        for (int i = 0; i < storedMessages.size(); i++) {
 
-            if (msg.messageID.equals(id)) {
+    MessageData msg = storedMessages.get(i);
 
-                return msg.message;
-            }
-        }
+    if (msg.messageID.equals(id)) {
+
+        return msg.message;
+    }
+}
         return "Message not found";
     }
 
@@ -324,24 +442,26 @@ public class Messages {
 
         String results = "";
 
-        for (MessageData msg : sentMessages) {
+        for (int i = 0; i < storedMessages.size(); i++) {
 
-            if (msg.recipient.equals(recipient)) {
+    MessageData msg = storedMessages.get(i);
 
-                results += msg.message + "\n";
-            }
-        }
+    if (msg.recipient.equals(recipient)) {
+
+        results += msg.message + "\n";
+    }
+}
 
         return results;
     }
     boolean deleteByHash(String hash) {
 
-        for (int i = 0; i < sentMessages.size(); i++) {
+        for (int i = 0; i < storedMessages.size(); i++) {
 
-            if (sentMessages.get(i)
+            if (storedMessages.get(i)
                     .messageHash.equals(hash)) {
 
-                sentMessages.remove(i);
+                storedMessages.remove(i);
 
                 saveMessagesToJSON();
 
@@ -356,17 +476,18 @@ public class Messages {
 
         String report = "";
 
-        for (MessageData msg : sentMessages) {
+        for (int i = 0; i < storedMessages.size(); i++) {
 
-            report += "Message Hash: "
+    MessageData msg = storedMessages.get(i);
+
+     report += "Message Hash: "
                     + msg.messageHash
                     + "\nRecipient: "
                     + msg.recipient
                     + "\nMessage: "
                     + msg.message
                     + "\n\n";
-        }
-
+} 
         return report;
     }
 }
